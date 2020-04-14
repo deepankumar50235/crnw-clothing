@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
 import HomePage from "./pages/homepage/homepage";
@@ -28,12 +28,12 @@ class App extends React.Component {
             ...snapShot.data(),
           });
           console.log("---signed in ---");
-          console.log(this.props);
         });
       } else {
         setCurrentUser(userAuth);
         console.log("---signed out ---");
-        console.log(this.state);
+        console.log(userAuth);
+        console.log(this.props);
       }
     });
   }
@@ -43,21 +43,49 @@ class App extends React.Component {
   }
 
   render() {
+    console.log("--App Render---");
+    const { currentUser } = this.props;
     return (
       <div>
         <Header />
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route path="/shop" component={ShopPage} />
-          <Route path="/signin" component={SignInAndSignUpPage} />
+          <Route
+            exact
+            path="/signin"
+            render={() =>
+              currentUser ? <Redirect to="/" /> : <SignInAndSignUpPage />
+            }
+          />
         </Switch>
       </div>
     );
   }
 }
 
-const mapDispatchToProps = (dispatch) => ({
-  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+// const mapStateToProps = ({ user }) => {
+//   console.log("mapStateToProps");
+//   console.log(user);
+//   return {
+//     currentUser: user.currentUser,
+//   };
+// };
+
+const mapStateToProps = (state) => ({
+  currentUser: state.user.currentUser,
 });
 
-export default connect(null, mapDispatchToProps)(App);
+const mapDispatchToProps = (dispatch) => {
+  console.log("dispatch");
+  //console.log(dispatch);
+  return {
+    setCurrentUser: (user) => {
+      console.log("----user---");
+      console.log(user);
+      dispatch(setCurrentUser(user));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
