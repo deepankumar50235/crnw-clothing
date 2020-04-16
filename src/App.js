@@ -16,7 +16,6 @@ class App extends React.Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
-    console.log(this.props);
     const { setCurrentUser } = this.props;
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
       if (userAuth) {
@@ -27,13 +26,9 @@ class App extends React.Component {
             id: snapShot.id,
             ...snapShot.data(),
           });
-          console.log("---signed in ---");
         });
       } else {
         setCurrentUser(userAuth);
-        console.log("---signed out ---");
-        console.log(userAuth);
-        console.log(this.props);
       }
     });
   }
@@ -43,7 +38,6 @@ class App extends React.Component {
   }
 
   render() {
-    console.log("--App Render---");
     const { currentUser } = this.props;
     return (
       <div>
@@ -65,8 +59,6 @@ class App extends React.Component {
 }
 
 // const mapStateToProps = ({ user }) => {
-//   console.log("mapStateToProps");
-//   console.log(user);
 //   return {
 //     currentUser: user.currentUser,
 //   };
@@ -77,12 +69,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => {
-  console.log("dispatch");
-  //console.log(dispatch);
   return {
     setCurrentUser: (user) => {
-      console.log("----user---");
-      console.log(user);
       dispatch(setCurrentUser(user));
     },
   };

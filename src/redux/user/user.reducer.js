@@ -5,11 +5,9 @@ const INITIAL_STATE = {
 };
 
 const userReducer = (state = INITIAL_STATE, action) => {
+  console.log("userReducer");
   switch (action.type) {
     case UsersAcionTypes.SET_CURRENT_USER:
-      console.log("userReducer");
-      console.log(state);
-      console.log(action.payload);
       return {
         ...state,
         currentUser: action.payload,
